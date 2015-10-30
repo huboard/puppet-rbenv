@@ -5,6 +5,7 @@ Puppet::Type.type(:rbenvgem).provide :default do
     args = ['install', '--no-rdoc', '--no-ri']
     args << "-v#{resource[:ensure]}" if !resource[:ensure].kind_of?(Symbol)
     args << [ '--source', "'#{resource[:source]}'" ] if resource[:source] != ''
+    args << [ '--local', "'#{resource[:local]}'" ] if resource[:local] != ''
     args << gem_name
     output = gem(*args)
     fail "Could not install: #{output.chomp}" if output.include?('ERROR')
@@ -47,7 +48,10 @@ Puppet::Type.type(:rbenvgem).provide :default do
     def list(where = :local)
       args = ['list', where == :remote ? '--remote' : '--local', "#{gem_name}$"]
 
-      gem(*args).lines.map do |line|
+      versions = []
+
+      gem(*args).lines.each do |line|
+        next if line =~ /RUBY_HEAP/
         line =~ /^(?:\S+)\s+\((.+)\)/
 
         return nil unless $1
@@ -55,6 +59,8 @@ Puppet::Type.type(:rbenvgem).provide :default do
         # Fetch the version number
         ver = $1.split(/,\s*/)
         ver.empty? ? nil : ver
-      end.first
+      end
+
+      versions.first
     end
 end
