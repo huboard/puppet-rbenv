@@ -93,14 +93,14 @@ define rbenv::compile(
 
   # Install bundler
   #
-  rbenv::gem {"rbenv::bundler ${user} ${ruby}":
-    ensure => $bundler,
-    user   => $user,
-    ruby   => $ruby,
-    gem    => 'bundler',
-    home   => $home_path,
-    root   => $root_path,
-  }
+  #rbenv::gem {"rbenv::bundler ${user} ${ruby}":
+  #ensure => $bundler,
+  #user   => $user,
+  #ruby   => $ruby,
+  #gem    => 'bundler',
+  #home   => $home_path,
+  #root   => $root_path,
+  #}
 
   # Set default global ruby version for rbenv, if requested
   #
