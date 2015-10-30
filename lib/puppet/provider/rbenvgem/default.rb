@@ -63,7 +63,9 @@ Puppet::Type.type(:rbenvgem).provide :default do
 
         # Fetch the version number
         ver = $1.split(/,\s*/)
-        ver.empty? ? nil : ver
+        ver.each do |v|
+          versions << v
+        end
       end
 
       versions.first
